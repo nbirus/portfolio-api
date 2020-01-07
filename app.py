@@ -4,9 +4,11 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 api = Api(app)
-cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+CORS(app)
 
 class Message(Resource):
+    def get(self):
+        return {'status': 200}
     def post(self):
 
         # get data from body
