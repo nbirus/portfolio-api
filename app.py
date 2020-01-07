@@ -24,8 +24,10 @@ class Message(Resource):
 api.add_resource(Message, '/')
 
 def email_message(msg):
+  print('HERE')
+  print(os.getenv('SLACK'))
   message = 'Name: ' + msg['name'] + '; Email: ' + msg['email']  + '; Message: ' + msg['message'] 
-  data = '{"text":"' + message +'"}'
+  data = '{"text":"' + message + '"}'
   headers = {'Content-type': 'application/json'}
   response = requests.post(os.getenv('SLACK'), headers=headers, data=data)
 
