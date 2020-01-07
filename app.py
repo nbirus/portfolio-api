@@ -1,6 +1,8 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_restful import Resource, Api
 from flask_cors import CORS
+import requests
+import os
 
 app = Flask(__name__)
 api = Api(app)
@@ -12,7 +14,7 @@ class Message(Resource):
     def post(self):
 
         # get data from body
-        data = request.get_data()
+        data = request.get_json(force=True)
 
         # email message to me
         email_message(data)
@@ -22,7 +24,10 @@ class Message(Resource):
 api.add_resource(Message, '/')
 
 def email_message(msg):
-  print(msg)
+  message = 'Name: ' + msg['name'] + '; Email: ' + msg['email']  + '; Message: ' + msg['message'] 
+  data = '{"text":"' + message +'"}'
+  headers = {'Content-type': 'application/json'}
+  response = requests.post(os.getenv('SLACK'), headers=headers, data=data)
 
 if __name__ == '__main__':
     app.run(debug=True)
